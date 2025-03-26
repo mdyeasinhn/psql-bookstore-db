@@ -26,15 +26,15 @@ INSERT INTO books (title, author, price, stock, published_year) VALUES
 
 
 --  Table to customer details 
-CREATE TABLE customer (
+CREATE TABLE customers (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50),
+    customer_name VARCHAR(50),
     email VARCHAR(100),
     joined_date DATE
 );
 
--- Inserting customer 
-INSERT INTO customer (name, email, joined_date) VALUES
+-- Inserting customers 
+INSERT INTO customers (customer_name, email, joined_date) VALUES
 ('John Doe', 'john.doe@example.com', '2023-01-15'),
 ('Jane Smith', 'jane.smith@example.com', '2023-02-20'),
 ('Alice Johnson', 'alice.johnson@example.com', '2023-03-10'),
@@ -50,7 +50,7 @@ INSERT INTO customer (name, email, joined_date) VALUES
 -- Create a order table 
 CREATE TABLE orders (
     id SERIAL PRIMARY KEY,
-    customer_id INTEGER REFERENCES customer(id),
+    customer_id INTEGER REFERENCES customers(id),
     book_id INTEGER REFERENCES books(id),
     quantity INT,
     order_date DATE
@@ -82,6 +82,12 @@ SELECT * FROM books WHERE stock = FALSE ;
 
 
 
---Retrieve the most expensive book in the store.
+--  Retrieve the most expensive book in the store.
 SELECT * FROM books ORDER BY price DESC LIMIT 1;
+
+
+-- Calculate the total revenue generated from book sales.
+SELECT SUM(orders.quantity * books.price) AS total_revenue
+FROM orders 
+JOIN books ON orders.book_id = books.id;
 
