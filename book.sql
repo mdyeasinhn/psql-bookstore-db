@@ -17,4 +17,13 @@ CREATE TABLE customer (
     name VARCHAR(50),
     email VARCHAR(100),
     joined_date DATE
-) 
+);
+
+-- Create a order table 
+CREATE TABLE orders (
+    id SERIAL PRIMARY KEY,
+    customer_id INTEGER REFERENCES customer(id),
+    book_id INTEGER REFERENCES book(id),
+    quantity INT,
+    order_date DATE
+);
