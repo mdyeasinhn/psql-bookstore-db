@@ -2,7 +2,7 @@
 
 
 -- Table to store book details
-CREATE TABLE books (
+CREATE TABLE book (
     id SERIAL PRIMARY KEY,  
     title VARCHAR(50),  
     author VARCHAR(50),  
@@ -10,3 +10,11 @@ CREATE TABLE books (
     stock BOOLEAN,  
     published_year DATE  
 );
+
+--  Table to customer details 
+CREATE TABLE customer (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50),
+    email VARCHAR(100),
+    joined_date DATE
+) 
