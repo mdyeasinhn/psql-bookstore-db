@@ -25,6 +25,7 @@ INSERT INTO books (title, author, price, stock, published_year) VALUES
 ('Dracula', 'Bram Stoker', 15, FALSE, '1897-05-26');  -- Out of stock
 
 
+
 --  Table to customer details 
 CREATE TABLE customers (
     id SERIAL PRIMARY KEY,
@@ -91,6 +92,21 @@ SELECT SUM(orders.quantity * books.price) AS total_revenue
 FROM orders 
 JOIN books ON orders.book_id = books.id;
 
+SELECT c.id, c.name, COUNT(o.id) AS total_orders
+FROM customers c
+LEFT JOIN orders o ON c.id = o.customer_id
+GROUP BY c.id, c.name
+ORDER BY total_orders DESC;
+
+
+--  List all customers who have placed more than one order.
+SELECT c.id, c.name, COUNT(o.id) AS total_orders
+FROM customers AS c
+JOIN orders AS o ON c.id = o.customer_id
+GROUP BY c.id, c.name
+HAVING COUNT(o.id) > 1
+ORDER BY total_orders DESC;
+
 
 
 -- Find the average price of books in the store.
@@ -99,4 +115,15 @@ SELECT avg(price)as avg_book_price FROM books;
 --  Increase the price of all books published before 2000 by 10%.
 UPDATE books
 SET price = price * 1.10
-WHERE published_year < '2000-01-01';
+WHERE published_year < '2000-01-01'
+
+
+
+-- Delete customers who haven't placed any orders.
+DELETE FROM customers
+WHERE id NOT IN (SELECT customer_id FROM orders);
+
+
+
+--
+SELECT * FROM customers;
