@@ -92,18 +92,11 @@ SELECT SUM(orders.quantity * books.price) AS total_revenue
 FROM orders 
 JOIN books ON orders.book_id = books.id;
 
-SELECT c.id, c.name, COUNT(o.id) AS total_orders
-FROM customers c
-LEFT JOIN orders o ON c.id = o.customer_id
-GROUP BY c.id, c.name
-ORDER BY total_orders DESC;
-
-
 --  List all customers who have placed more than one order.
-SELECT c.id, c.name, COUNT(o.id) AS total_orders
+SELECT  c.customer_name, COUNT(o.id) AS total_orders
 FROM customers AS c
 JOIN orders AS o ON c.id = o.customer_id
-GROUP BY c.id, c.name
+GROUP BY c.id, c.customer_name
 HAVING COUNT(o.id) > 1
 ORDER BY total_orders DESC;
 
