@@ -86,19 +86,36 @@ SELECT * FROM books WHERE stock = FALSE ;
 --  Retrieve the most expensive book in the store.
 SELECT * FROM books ORDER BY price DESC LIMIT 1;
 
+--  Find the total number of orders placed by each customer.
+SELECT c.customer_name, sub.total_orders
+FROM customers AS c
+JOIN (
+    SELECT customer_id, COUNT(id) AS total_orders
+    FROM orders
+    GROUP BY customer_id
+) AS sub ON c.id = sub.customer_id
+WHERE sub.total_orders > 1
+ORDER BY sub.total_orders DESC;
+
+
 
 -- Calculate the total revenue generated from book sales.
 SELECT SUM(orders.quantity * books.price) AS total_revenue
 FROM orders 
 JOIN books ON orders.book_id = books.id;
 
---  List all customers who have placed more than one order.
-SELECT  c.customer_name, COUNT(o.id) AS total_orders
+
+-- List all customers who have placed more than one order.
+SELECT c.customer_name, sub.orders_count
 FROM customers AS c
-JOIN orders AS o ON c.id = o.customer_id
-GROUP BY c.id, c.customer_name
-HAVING COUNT(o.id) > 1
-ORDER BY total_orders DESC;
+JOIN (
+    SELECT customer_id, COUNT(id) AS orders_count
+    FROM orders
+    GROUP BY customer_id
+) AS sub ON c.id = sub.customer_id
+WHERE sub.orders_count > 1
+ORDER BY sub.orders_count DESC;
+
 
 
 
